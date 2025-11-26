@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Lecteur Audio Premium</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+    /* --- GLOBAL PAGE --- */
+    body {
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(145deg, #0d0d0d, #1f1f1f);
+        font-family: "Arial", sans-serif;
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    /* --- PLAYER WRAPPER --- */
+    .container {
+        background: rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(12px);
+        padding: 20px 25px;
+        width: 360px;
+        border-radius: 25px;
+        text-align: center;
+        box-shadow: 0px 15px 40px rgba(0,0,0,0.4);
+        animation: fadeIn 0.7s ease-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity:0; transform: translateY(20px); }
+        to   { opacity:1; transform: translateY(0); }
+    }
+
+    /* --- ALBUM IMAGE --- */
+    .cover {
+        width: 100%;
+        border-radius: 15px;
+        margin-bottom: 20px;
+        box-shadow: 0px 10px 25px rgba(0,0,0,0.5);
+    }
+
+    /* --- AUDIO BAR --- */
+    audio {
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    /* --- PLAYLIST --- */
+    .playlist {
+        margin-top: 25px;
+        text-align: left;
+        max-height: 180px;
+        overflow-y: auto;
+        padding-right: 5px;
+    }
+
+    .song {
+        padding: 10px 8px;
+        margin-bottom: 8px;
+        background: rgba(255,255,255,0.08);
+        border-radius: 10px;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .song:hover {
+        background: rgba(255,255,255,0.20);
+    }
+
+    .active {
+        background: rgba(0, 150, 255, 0.4);
+        box-shadow: 0px 0px 10px rgba(0,150,255,0.5);
+    }
+
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+    <h2>🎵 Lecteur Premium</h2>
+
+    <!-- Image d'album -->
+    <img id="cover" class="cover" src="cover.jpg" alt="Album">
+
+    <!-- Lecteur audio -->
+    <audio id="audioPlayer" controls>
+        <source id="audioSource" src="audio/musique1.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Playlist -->
+    <div class="playlist" id="playlist"></div>
+
+</div>
+
+<script>
+/* ========== PLAYLIST CONFIG ========== */
+/* Ajoute tes musiques ici. Tu peux en mettre autant que tu veux. */
+
+let tracks = [
+    {
+        title: "J’suis ta petite blonde",
+        file: "J’suis ta petite blonde aux yeux bleu sa.mp3",
+        cover: "cover.jpg"
+    },
+    {
+        title: "Ipséité Soumise",
+        file: "Ipséité Soumise.mp3",
+        cover: "cover.jpg"
+    },
+    {
+        title: "Ma musique 3",
+        file: "musique3.mp3",
+        cover: "cover.jpg"
+    }
+];
+
+/* ========== SCRIPT LECTEUR ========== */
+let playlistDiv = document.getElementById("playlist");
+let audioPlayer = document.getElementById("audioPlayer");
+let audioSource = document.getElementById("audioSource");
+let coverImg = document.getElementById("cover");
+
+function loadTrack(index){
+    audioSource.src = "audio/" + tracks[index].file;
+    coverImg.src = tracks[index].cover;
+    audioPlayer.load();
+    audioPlayer.play();
+
+    // mise à jour de l'affichage actif
+    let allSongs = document.getElementsByClassName("song");
+    for (let i=0; i<allSongs.length; i++){
+        allSongs[i].classList.remove("active");
+    }
+    allSongs[index].classList.add("active");
+}
+
+/* --- Créer la playlist dans la page --- */
+tracks.forEach((t, index) => {
+    let songDiv = document.createElement("div");
+    songDiv.classList.add("song");
+    songDiv.innerText = t.title;
+    songDiv.onclick = () => loadTrack(index);
+    playlistDiv.appendChild(songDiv);
+});
+
+/* Charger la 1ère piste par défaut */
+loadTrack(0);
+</script>
+
+</body>
+</html>
